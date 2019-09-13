@@ -1,0 +1,2 @@
+eBook title1 author1 10 ./resources/text.txt
+pBook title2 author2 20 true
