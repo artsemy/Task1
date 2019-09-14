@@ -1,2 +1,5 @@
-eBook title1 author1 10 ./resources/text.txt
-pBook title2 author2 20 true
+eBook| title1| author1| 10| ./resources/text.txt
+pBook| title2| author2| 20| true
+eBook| title3| author3| 30| ./resources/text.txt
+pBook| title4| author4| 40| true
+pBook| title3| author5| 20| false

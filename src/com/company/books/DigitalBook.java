@@ -24,6 +24,6 @@ public class DigitalBook extends Book {
 
     @Override
     public String toString() {
-        return super.toString() + ", textLink='" + textLink;
+        return super.toString() + ", textLink='" + textLink + '\'';
     }
 }
