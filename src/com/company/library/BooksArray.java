@@ -1,9 +1,8 @@
-package com.company;
+package com.company.library;
 
 import com.company.books.Book;
 import com.company.books.DigitalBook;
 import com.company.books.PaperBook;
-import com.company.users.User;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,53 +12,25 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Library {
+public class BooksArray {
 
-    private User[] users;
     private Book[] books;
 
-    public Library() {
-        users = new User[0];
+    public BooksArray() {
         books = new Book[0];
-        initUsers("./resources/users.txt");
         initBooks("./resources/books.txt");
     }
 
-    public User[] getUsers() {
-        return users;
+    public BooksArray(Book[] books) {
+        this.books = books;
     }
 
     public Book[] getBooks() {
         return books;
     }
 
-    private void initUsers(String sPath){
-        String str;
-        Path path = Paths.get(sPath);
-        try (Scanner scanner = new Scanner(path)) {
-            if (scanner.hasNext()){
-                str = scanner.nextLine();
-                User user = buildUser(str);
-                addUser(user);
-            }
-            while (scanner.hasNext()) {
-                str = scanner.nextLine();
-                User user = buildUser(str);
-                addUser(user);
-            }
-        } catch (IOException ignored) {
-        }
-    }
-
-    private User buildUser(String str){
-        String[] mass = str.split(" ");
-        User user = new User(mass[0], mass[1], Boolean.parseBoolean(mass[2]));
-        return user;
-    }
-
-    private void addUser(User user){
-        users = Arrays.copyOf(users, users.length+1);
-        users[users.length-1] = user;
+    public void setBooks(Book[] books) {
+        this.books = books;
     }
 
     private void initBooks(String sPath){
@@ -84,8 +55,7 @@ public class Library {
         Book book;
         String[] mass = str.split("\\| ");
         if (mass[0].equals("eBook")){
-            String text = "./resources/text.txt";
-            book = new DigitalBook(mass[1], mass[2], Integer.parseInt(mass[3]), text);
+            book = new DigitalBook(mass[1], mass[2], Integer.parseInt(mass[3]), mass[4]);
         } else {
             book = new PaperBook(mass[1], mass[2], Integer.parseInt(mass[3]),Boolean.parseBoolean(mass[4]));
         }
@@ -97,46 +67,44 @@ public class Library {
         books[books.length-1] = book;
     }
 
-    public void printUsers(){
-        for (User u: users) {
-            System.out.println(u);
+    public void printPageBooks(int start, int number){
+        for (int i = start; i < start+number; i++) {
+            printBook(books[i]);
         }
     }
 
-    public void printBooks(){
+    public void printBook(Book book){
+        if (book instanceof DigitalBook) {
+            System.out.println("eBook " + book);
+        } else {
+            System.out.println("pBook " + book);
+        }
+    }
+
+    public void print(){
         for (Book b: books) {
-            if (b instanceof DigitalBook) {
-                System.out.println("eBook " + b);
-            } else {
-                System.out.println("pBook " + b);
-            }
+            System.out.println(b);
         }
     }
 
-    public void findByAuthor(String name){
-        boolean found = false;
+    public BooksArray findByAuthor(String name){
+        BooksArray array = new BooksArray();
         for (Book b: books) {
             if (b.getAuthor().contains(name)){
-                System.out.println(b);
-                found = true;
+                array.addBook(b);
             }
         }
-        if (!found){
-            System.out.println("nothing found");
-        }
+        return array;
     }
 
-    public void findByTitle(String title){
-        boolean found = false;
+    public BooksArray findByTitle(String title){
+        BooksArray array = new BooksArray();
         for (Book b: books) {
             if (b.getTitle().contains(title)){
-                System.out.println(b);
-                found = true;
+                array.addBook(b);
             }
         }
-        if (!found){
-            System.out.println("nothing found");
-        }
+        return array;
     }
 
     public void insertBook(Book book) {

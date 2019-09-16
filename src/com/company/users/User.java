@@ -5,11 +5,13 @@ public class User {
     private String login;
     private String password;
     private boolean isAdmin;
+    private String email;
 
-    public User(String login, String password, boolean isAdmin) {
+    public User(String login, String password, boolean isAdmin, String email) {
         this.login = login;
         this.password = password;
         this.isAdmin = isAdmin;
+        this.email = email;
     }
 
     public String getLogin() {
@@ -34,6 +36,14 @@ public class User {
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override

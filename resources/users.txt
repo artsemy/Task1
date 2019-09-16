@@ -1,2 +1,2 @@
-admin !!!! true
-user """" false
+admin !!!! true email1@mail.ru
+user """" false email2@mail.ru

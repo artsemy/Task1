@@ -3,6 +3,7 @@ package com.company;
 import com.company.books.Book;
 import com.company.books.DigitalBook;
 import com.company.books.PaperBook;
+import com.company.library.Library;
 import com.company.users.User;
 
 import java.util.Scanner;
@@ -29,7 +30,7 @@ public class Menu {
             String login = scanner.nextLine();
             System.out.println("insert password");
             String password = scanner.nextLine();
-            User user = findLoginUser(login, password);
+            User user = library.findLoginUser(login, password);
             if (user != null){
                 correct = true;
                 status = user.isAdmin();
@@ -38,24 +39,6 @@ public class Menu {
                 System.out.println("incorrect login or password");
             }
         }
-    }
-
-    private User findLoginUser(String login, String password){
-        String newPassword = cryptPassword(password);
-        for (User u: library.getUsers()) {
-            if (u.getLogin().equals(login) && u.getPassword().equals(newPassword)){
-                return u;
-            }
-        }
-        return null;
-    }
-
-    private String cryptPassword(String password){
-        char[] mass = password.toCharArray();
-        for (int i = 0; i < mass.length; i++) {
-            mass[i] = (char) (mass[i] - 15);
-        }
-        return String.valueOf(mass);
     }
 
     private void libMenu(){
@@ -73,7 +56,7 @@ public class Menu {
                     login();
                     break;
                 case "print_books":
-                    library.printBooks();
+                    formatPrintBooks();
                     break;
                 case "print_users":
                     if (status){
@@ -112,6 +95,48 @@ public class Menu {
         }
         System.out.println("'find' - to start search");
         System.out.println("'exit' - to exit");
+    }
+
+    private void formatPrintBooks(){
+        System.out.println("'next' - to next page");
+        System.out.println("'prev' - to prev page");
+        System.out.println("'exit' - to exit");
+        Scanner scanner = new Scanner(System.in);
+        boolean exit = false;
+        int page = 1;
+        if (library.hasPage(page)){
+            library.printBooks(page);
+        }
+        while (!exit){
+            String command = scanner.nextLine();
+            switch (command){
+                case "next":
+                    page++;
+                    if (library.hasPage(page)){
+                        System.out.println("page = " + page);
+                        library.printBooks(page);
+                    } else {
+                        page--;
+                        System.out.println("no next page");
+                    }
+                    break;
+                case "prev":
+                    page--;
+                    if (library.hasPage(page)){
+                        System.out.println("page = " + page);
+                        library.printBooks(page);
+                    } else {
+                        page++;
+                        System.out.println("no prev page");
+                    }
+                    break;
+                case "exit":
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("bad command");
+            }
+        }
     }
 
     private void find(){
@@ -164,7 +189,8 @@ public class Menu {
         int pages = scanner.nextInt();
         if (type.equals("eBook")){
             System.out.println("insert link");
-            String link = "./resources/text.txt";
+            String link = scanner.nextLine();
+            link = "./resources/text.txt";
             book = new DigitalBook(title, author, pages, link);
         } else {
             System.out.println("insert is in library: 'true' or 'false'");
