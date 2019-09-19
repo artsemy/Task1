@@ -10,3 +10,4 @@ eBook| title3| author3| 30| ./resources/text.txt
 pBook| title4| author4| 40| true
 pBook| title3| author5| 20| false
 eBook| title3| author5| 10| ./resources/text.txt
+pBook| title10| author10| 1| true

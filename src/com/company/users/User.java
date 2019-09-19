@@ -53,4 +53,10 @@ public class User {
                 ", isAdmin=" + isAdmin +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        User u = (User) obj;
+        return (login.equals(u.login) && password.equals(u.password) && email.equals(u.email));
+    }
 }

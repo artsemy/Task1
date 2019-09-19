@@ -14,6 +14,22 @@ public class Library {
         usersArray = new UsersArray();
     }
 
+    public BooksArray getBooksArray() {
+        return booksArray;
+    }
+
+    public void setBooksArray(BooksArray booksArray) {
+        this.booksArray = booksArray;
+    }
+
+    public UsersArray getUsersArray() {
+        return usersArray;
+    }
+
+    public void setUsersArray(UsersArray usersArray) {
+        this.usersArray = usersArray;
+    }
+
     public User findLoginUser(String login, String password){
         String newPassword = cryptPassword(password);
         for (User u: usersArray.getUsers()) {
@@ -74,5 +90,13 @@ public class Library {
 
     public void insertBook(Book book){
         booksArray.insertBook(book);
+    }
+
+    public void newBookMessage(User user, Book b){
+        usersArray.newBookMassage(user, b);
+    }
+
+    public void offerBookMessage(String name, String link){
+        usersArray.offerBookMessage(name, link);
     }
 }

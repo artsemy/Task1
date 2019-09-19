@@ -1,5 +1,6 @@
 package com.company.library;
 
+import com.company.books.Book;
 import com.company.users.User;
 
 import java.io.IOException;
@@ -57,6 +58,34 @@ public class UsersArray {
     public void printUsers(){
         for (User u: users) {
             System.out.println(u);
+        }
+    }
+
+    public void newBookMassage(User user, Book b){
+        String msg = b.toString() + "\nfrom: " + user.getLogin() + ", " + user.getEmail();
+        String sub = "new book";
+        String from = "from";
+        String pass = "pass";
+        String to = "to";
+        for (int i = 0; i < users.length; i++) {
+            if (!users[i].equals(user)){
+                to = users[i].getEmail();
+//                Mailer.send(from, pass, to, sub, msg);
+            }
+        }
+    }
+
+    public void offerBookMessage(String userName, String link){
+        String msg = "from: " + userName + " link: " + link;
+        String sub = "offer book";
+        String from = "from";
+        String pass = "pass";
+        String to = "to";
+        for (int i = 0; i < users.length; i++) {
+            if (users[i].isAdmin()){
+                to = users[i].getEmail();
+//                Mailer.send(from, pass, to, sub, msg);
+            }
         }
     }
 }

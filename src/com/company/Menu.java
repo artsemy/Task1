@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Menu {
 
-    private boolean status;
+    private User user;
     private Library library;
 
     public Menu() {
@@ -30,10 +30,9 @@ public class Menu {
             String login = scanner.nextLine();
             System.out.println("insert password");
             String password = scanner.nextLine();
-            User user = library.findLoginUser(login, password);
+            user = library.findLoginUser(login, password);
             if (user != null){
                 correct = true;
-                status = user.isAdmin();
                 System.out.println("we are in!!!");
             } else {
                 System.out.println("incorrect login or password");
@@ -59,21 +58,25 @@ public class Menu {
                     formatPrintBooks();
                     break;
                 case "print_users":
-                    if (status){
+                    if (user.isAdmin()){
                         library.printUsers();
                     } else {
                         System.out.println("only admins can use it");
                     }
                     break;
                 case "add_book":
-                    if (status){
-                        addBook();
+                    if (user.isAdmin()){
+                        Book b = addBook();
+                        library.newBookMessage(user, b);
                     } else {
                         System.out.println("only admins can use it");
                     }
                     break;
                 case "find":
                     find();
+                    break;
+                case "offer":
+                    offerBook();
                     break;
                 case "exit":
                     exit = true;
@@ -89,18 +92,17 @@ public class Menu {
         System.out.println("'commands' - to print commands");
         System.out.println("'login' - to change user");
         System.out.println("'print_books' - to print all books");
-        if (status){
+        if (user.isAdmin()){
             System.out.println("'print_users' - to print all users");
             System.out.println("'add_book' - to add book");
         }
         System.out.println("'find' - to start search");
+        System.out.println("'offer' - to offer book");
         System.out.println("'exit' - to exit");
     }
 
     private void formatPrintBooks(){
-        System.out.println("'next' - to next page");
-        System.out.println("'prev' - to prev page");
-        System.out.println("'exit' - to exit");
+        printFormatCommands();
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
         int page = 1;
@@ -110,6 +112,9 @@ public class Menu {
         while (!exit){
             String command = scanner.nextLine();
             switch (command){
+                case "commands":
+                    printFormatCommands();
+                    break;
                 case "next":
                     page++;
                     if (library.hasPage(page)){
@@ -137,6 +142,13 @@ public class Menu {
                     System.out.println("bad command");
             }
         }
+    }
+
+    private void printFormatCommands(){
+        System.out.println("'commands' - to print commands");
+        System.out.println("'next' - to next page");
+        System.out.println("'prev' - to prev page");
+        System.out.println("'exit' - to exit");
     }
 
     private void find(){
@@ -176,7 +188,7 @@ public class Menu {
         System.out.println("'commands' - to print all commands");
     }
 
-    private void addBook(){
+    private Book addBook(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("insert type of book: 'eBook' or 'pBook'");
         String type = scanner.nextLine();
@@ -194,10 +206,18 @@ public class Menu {
             book = new DigitalBook(title, author, pages, link);
         } else {
             System.out.println("insert is in library: 'true' or 'false'");
-            Boolean inAccess = scanner.nextBoolean();
+            boolean inAccess = scanner.nextBoolean();
             book = new PaperBook(title, author, pages, inAccess);
         }
         library.insertBook(book);
         System.out.println("added: " + book);
+        return book;
+    }
+
+    private void offerBook(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("insert link to the book");
+        String link = scanner.nextLine();
+        library.offerBookMessage(user.getEmail(), link);
     }
 }
