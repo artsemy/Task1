@@ -9,27 +9,13 @@ public class Library {
     private UsersArray usersArray;
     private int pageSize = 5;
 
+    //init library
     public Library() {
         booksArray = new BooksArray();
         usersArray = new UsersArray();
     }
 
-    public BooksArray getBooksArray() {
-        return booksArray;
-    }
-
-    public void setBooksArray(BooksArray booksArray) {
-        this.booksArray = booksArray;
-    }
-
-    public UsersArray getUsersArray() {
-        return usersArray;
-    }
-
-    public void setUsersArray(UsersArray usersArray) {
-        this.usersArray = usersArray;
-    }
-
+    //find login user
     public User findLoginUser(String login, String password){
         String newPassword = cryptPassword(password);
         for (User u: usersArray.getUsers()) {
@@ -40,6 +26,7 @@ public class Library {
         return null;
     }
 
+    //encrypting pass
     private String cryptPassword(String password){
         char[] mass = password.toCharArray();
         for (int i = 0; i < mass.length; i++) {
@@ -48,6 +35,7 @@ public class Library {
         return String.valueOf(mass);
     }
 
+    //print page 'page' of books
     public void printBooks(int page){
         int k1 = booksArray.getBooks().length / pageSize;
         int k2 = booksArray.getBooks().length % pageSize;
@@ -60,10 +48,12 @@ public class Library {
         }
     }
 
+    //check for page exists
     public boolean hasPage(int page){
         return page <= countPages() && page > 0;
     }
 
+    //count pages
     private int countPages(){
         int k1 = booksArray.getBooks().length / pageSize;
         int k2 = booksArray.getBooks().length % pageSize;
@@ -74,29 +64,34 @@ public class Library {
         }
     }
 
+    //print users
     public void printUsers(){
-        for (User u: usersArray.getUsers()) {
-            System.out.println(u);
-        }
+        usersArray.printUsers();
     }
 
+    //print find by author
     public void findByAuthor(String author){
         booksArray.findByAuthor(author).print();
     }
 
+    //print find by title
     public void findByTitle(String title){
         booksArray.findByTitle(title).print();
     }
 
+    //insert book
     public void insertBook(Book book){
         booksArray.insertBook(book);
     }
 
+    //send emails when added book
     public void newBookMessage(User user, Book b){
         usersArray.newBookMassage(user, b);
     }
 
+    //send email with offered book
     public void offerBookMessage(String name, String link){
         usersArray.offerBookMessage(name, link);
     }
+
 }

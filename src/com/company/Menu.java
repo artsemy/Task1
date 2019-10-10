@@ -13,15 +13,18 @@ public class Menu {
     private User user;
     private Library library;
 
+    //constructor, init library
     public Menu() {
         library = new Library();
     }
 
+    //run menu
     public void run(){
         login();
         libMenu();
     }
 
+    //login in system
     private void login(){
         Scanner scanner = new Scanner(System.in);
         boolean correct = false;
@@ -30,6 +33,7 @@ public class Menu {
             String login = scanner.nextLine();
             System.out.println("insert password");
             String password = scanner.nextLine();
+            //find and get logged user
             user = library.findLoginUser(login, password);
             if (user != null){
                 correct = true;
@@ -40,6 +44,7 @@ public class Menu {
         }
     }
 
+    //main menu
     private void libMenu(){
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
@@ -59,6 +64,7 @@ public class Menu {
                     break;
                 case "print_users":
                     if (user.isAdmin()){
+                        //print users
                         library.printUsers();
                     } else {
                         System.out.println("only admins can use it");
@@ -67,6 +73,7 @@ public class Menu {
                 case "add_book":
                     if (user.isAdmin()){
                         Book b = addBook();
+                        //send message to all user when new book added
                         library.newBookMessage(user, b);
                     } else {
                         System.out.println("only admins can use it");
@@ -88,6 +95,7 @@ public class Menu {
         }
     }
 
+    //main menu commands
     private void printMainCommands(){
         System.out.println("'commands' - to print commands");
         System.out.println("'login' - to change user");
@@ -101,12 +109,14 @@ public class Menu {
         System.out.println("'exit' - to exit");
     }
 
+    //print books by pages menu
     private void formatPrintBooks(){
         printFormatCommands();
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
         int page = 1;
         if (library.hasPage(page)){
+            //print page of books
             library.printBooks(page);
         }
         while (!exit){
@@ -119,6 +129,7 @@ public class Menu {
                     page++;
                     if (library.hasPage(page)){
                         System.out.println("page = " + page);
+                        //print page of books
                         library.printBooks(page);
                     } else {
                         page--;
@@ -129,6 +140,7 @@ public class Menu {
                     page--;
                     if (library.hasPage(page)){
                         System.out.println("page = " + page);
+                        //print page of books
                         library.printBooks(page);
                     } else {
                         page++;
@@ -144,6 +156,7 @@ public class Menu {
         }
     }
 
+    //print books by pages menu commands
     private void printFormatCommands(){
         System.out.println("'commands' - to print commands");
         System.out.println("'next' - to next page");
@@ -151,6 +164,7 @@ public class Menu {
         System.out.println("'exit' - to exit");
     }
 
+    //find menu
     private void find(){
         Scanner scanner = new Scanner(System.in);
         printSearchCommands();
@@ -162,11 +176,13 @@ public class Menu {
                 case "author":
                     System.out.println("insert name of author");
                     command = scanner.nextLine();
+                    //print books with author
                     library.findByAuthor(command);
                     break;
                 case "title":
                     System.out.println("insert title");
                     command = scanner.nextLine();
+                    //print books with title
                     library.findByTitle(command);
                     break;
                 case "exit":
@@ -181,6 +197,7 @@ public class Menu {
         }
     }
 
+    //find menu commands
     private void printSearchCommands(){
         System.out.println("'author' - to find by author");
         System.out.println("'title' - to find by title");
@@ -188,6 +205,7 @@ public class Menu {
         System.out.println("'commands' - to print all commands");
     }
 
+    //add book page
     private Book addBook(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("insert type of book: 'eBook' or 'pBook'");
@@ -209,15 +227,19 @@ public class Menu {
             boolean inAccess = scanner.nextBoolean();
             book = new PaperBook(title, author, pages, inAccess);
         }
+        //insert book into catalog
         library.insertBook(book);
         System.out.println("added: " + book);
         return book;
     }
 
+    //user offer book to add
     private void offerBook(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("insert link to the book");
         String link = scanner.nextLine();
+        //send message to admins with offered book
         library.offerBookMessage(user.getEmail(), link);
     }
+
 }

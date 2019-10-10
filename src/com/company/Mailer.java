@@ -4,6 +4,8 @@ import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+//sending email messages (after book add, offer book)
+//read comments in UsersArray class!!!
 class Mailer{
     public static void send(String from,String password,String to,String sub,String msg){
         //Get properties object
@@ -32,4 +34,5 @@ class Mailer{
             System.out.println("message sent successfully");
         } catch (MessagingException e) {throw new RuntimeException(e);}
     }
+
 }

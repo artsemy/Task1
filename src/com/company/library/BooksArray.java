@@ -16,23 +16,28 @@ public class BooksArray {
 
     private Book[] books;
 
+    //init books
     public BooksArray() {
         books = new Book[0];
         initBooks("./resources/books.txt");
     }
 
+    //constructor
     public BooksArray(Book[] books) {
         this.books = books;
     }
 
+    //get method
     public Book[] getBooks() {
         return books;
     }
 
+    //set method
     public void setBooks(Book[] books) {
         this.books = books;
     }
 
+    //read books from file
     private void initBooks(String sPath){
         String str;
         Path path = Paths.get(sPath);
@@ -51,6 +56,7 @@ public class BooksArray {
         }
     }
 
+    //build book from string line
     private Book buildBook(String str){
         Book book;
         String[] mass = str.split("\\| ");
@@ -62,17 +68,20 @@ public class BooksArray {
         return book;
     }
 
+    //add book
     private void addBook(Book book){
         books = Arrays.copyOf(books, books.length+1);
         books[books.length-1] = book;
     }
 
+    //print page of books, 'number' number of lines
     public void printPageBooks(int start, int number){
         for (int i = start; i < start+number; i++) {
             printBook(books[i]);
         }
     }
 
+    //print book
     public void printBook(Book book){
         if (book instanceof DigitalBook) {
             System.out.println("eBook " + book);
@@ -81,14 +90,16 @@ public class BooksArray {
         }
     }
 
+    //print all books
     public void print(){
         for (Book b: books) {
             System.out.println(b);
         }
     }
 
+    //find by author
     public BooksArray findByAuthor(String name){
-        BooksArray array = new BooksArray();
+        BooksArray array = new BooksArray(new Book[0]);
         for (Book b: books) {
             if (b.getAuthor().contains(name)){
                 array.addBook(b);
@@ -97,8 +108,9 @@ public class BooksArray {
         return array;
     }
 
+    //find by title
     public BooksArray findByTitle(String title){
-        BooksArray array = new BooksArray();
+        BooksArray array = new BooksArray(new Book[0]);
         for (Book b: books) {
             if (b.getTitle().contains(title)){
                 array.addBook(b);
@@ -107,6 +119,7 @@ public class BooksArray {
         return array;
     }
 
+    //insert book
     public void insertBook(Book book) {
         String line = buildLine(book);
         File file = new File("./resources/books.txt");
@@ -120,6 +133,7 @@ public class BooksArray {
         addBook(book);
     }
 
+    //build line to write into file
     private String buildLine(Book book){
         String line;
         String type;
@@ -135,4 +149,5 @@ public class BooksArray {
                 book.getAuthor() + "| " + book.getPages() + "| " + param;
         return line;
     }
+
 }
